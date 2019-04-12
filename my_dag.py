@@ -1,37 +1,25 @@
-from __future__ import print_function
-from airflow.operators import PythonOperator
-from airflow.models import DAG
-from datetime import datetime
+# load the dependencies
+from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
+from airflow.contrib.sensors.file_sensor import FileSensor
+from datetime import date, timedelta, datetime
 
-args = {
-    'owner': 'airflow',
-    'start_date': datetime.now(),
+import fetching_tweet
+import cleaning_tweet
+
+# default_args are the default arguments applied to the Dag's tasks
+DAG_DEFAULT_ARGS = {
+	'owner': 'Nagendra',
+	'depends_on_past': False,
+	'retries': 1,
+	'retry_delay': timedelta(minutes=1)
 }
 
-dag = DAG(
-    dag_id='my_first_dag', default_args=args,
-    schedule_interval=None)
+with DAG('my_dag', start_date=datetime(2019, 04, 12), schedule_interval="@daily", default_args=DAG_DEFAULT_ARGS, catchup=False) as dag:
+	waiting_file_task = FileSensor(task_id="waiting_file_task", fs_conn_id="fs_default", filepath="/home/ubuntu/airflow-files/data.csv", poke_interval=5)
 
-def print_context(i):
-    print(i)
-    return 'print_context has sucess {}'.format(i)
+	fetching_tweet_task = PythonOperator(task_id="fetching_tweet_task", python_callable=fetching_tweet.main)
 
+	cleaning_tweet_task = PythonOperator(task_id="cleaning_tweet_task", python_callable=cleaning_tweet.main)
 
-
-parent = None
-for i in range(10):
-    '''
-    Generating 10 sleeping task, sleeping from 0 to 9 seconds
-    respectively
-    '''
-    task = \
-        PythonOperator(
-            task_id='print_the_context.{}'.format(i),
-            python_callable=print_context,
-            op_kwargs={'i': i},
-            dag=dag)
-
-    if parent:
-        task.set_upstream(parent)
-
-    parent = task
+	waiting_file_task >> fetching_tweet_task >> cleaning_tweet_task
