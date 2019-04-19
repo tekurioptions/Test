@@ -57,7 +57,8 @@ DAG_DEFAULT_ARGS = {
         'owner': 'Nagendra',
         'depends_on_past': False,
         'retries': 1,
-        'retry_delay': timedelta(minutes=1)
+        'retry_delay': timedelta(minutes=1),
+        'provide_context': True
 }
 
 dag = DAG('cross_communication_test', description='test',
