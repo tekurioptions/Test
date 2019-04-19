@@ -28,12 +28,8 @@ def puller(**kwargs):
     v1 = ti.xcom_pull(key=None, task_ids='push')
     assert v1 == value_1
 
-    v1 = ti.xcom_pull(key=None, task_ids=['push'])
-    assert (v1) == (value_1)
-
-
 push1 = PythonOperator(
-    task_id='push', dag=dag, python_callable=push)
+    task_id='push', dag=dag, python_callable=push, provide_context=True)
 
 pull = BashOperator(
     task_id='also_run_this',
