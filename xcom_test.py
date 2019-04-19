@@ -60,7 +60,7 @@ DAG_DEFAULT_ARGS = {
         'retry_delay': timedelta(minutes=1)
 }
 
-dag = DAG('s3_upload_multiple', description='Upload two files in parallel',
+dag = DAG('cross_communication_test', description='test',
           start_date=datetime(2019, 4, 4),
           schedule_interval='@once',
           default_args=DAG_DEFAULT_ARGS, catchup=False)
