@@ -57,8 +57,7 @@ DAG_DEFAULT_ARGS = {
         'owner': 'Nagendra',
         'depends_on_past': False,
         'retries': 1,
-        'retry_delay': timedelta(minutes=1),
-        'provide_context': True
+        'retry_delay': timedelta(minutes=1)
 }
 
 dag = DAG('cross_communication_test', description='test',
@@ -91,6 +90,7 @@ s3_upload_file2 = PythonOperator(
 s3_read_file1 = PythonOperator(
     task_id='s3_read_file1',
     python_callable=read_csv_from_s3,
+    provide_context=True,
     op_kwargs={
         'bucket_name': 'ucb-qb-ca-eu-west-1-data',
         'input_key': 'ca4i-fr-data/airflow/mvp/input/authors.csv',
@@ -101,6 +101,7 @@ s3_read_file1 = PythonOperator(
 s3_read_file2 = PythonOperator(
     task_id='s3_read_file2',
     python_callable=read_csv_from_s3,
+    provide_context=True,
     op_kwargs={
         'bucket_name': 'ucb-qb-ca-eu-west-1-data',
         'input_key': 'ca4i-fr-data/airflow/mvp/input/investigators.csv',
@@ -111,6 +112,7 @@ s3_read_file2 = PythonOperator(
 transform_save_s3 = PythonOperator(
     task_id='transform_save_s3',
     python_callable=transform_save_csv_s3,
+    provide_context=True,
     op_kwargs={
         'bucket_name': 'ucb-qb-ca-eu-west-1-data',
         'output_key': 'ca4i-fr-data/airflow/mvp/output/matched.csv'
