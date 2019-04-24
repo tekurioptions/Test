@@ -30,7 +30,7 @@ test_arguments_pass = PythonOperator(
     provide_context=True,
     python_callable=print_context,
     dag=dag,
-    op_args=['1',])
+    op_args=['1', '2'])
 
 end_task = DummyOperator(task_id='end_dummy_task', retries=3, dag=dag)
 
