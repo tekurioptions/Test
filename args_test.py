@@ -6,9 +6,10 @@ from datetime import timedelta, datetime
 def print_context(x, y, ds, *args, **kwargs):
     print(args)
     print(kwargs)
+    print(kwargs.get('ds'))
     print(ds)
-    print(x)
-    print(y)
+    print("X is: " + x)
+    print("Y is: " + y)
     return 'Whatever you return gets printed in the logs'
 
 
