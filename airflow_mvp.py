@@ -82,7 +82,7 @@ s3_upload_file2 = PythonOperator(
     dag=dag)
 
 s3_read_transform_save = PythonOperator(
-    task_id='s3_read_file1',
+    task_id='s3_read_transform_save',
     python_callable=read_transform_save,
     op_kwargs={
         'bucket_name': 'ucb-qb-ca-eu-west-1-data',
