@@ -26,12 +26,19 @@ dag = DAG('args_test', description='arguments test',
 
 start_task = DummyOperator(task_id='start_dummy_task', retries=3, dag=dag)
 
+# test_arguments_pass = PythonOperator(
+#     task_id='test_arguments_pass',
+#     provide_context=True,
+#     python_callable=print_context,
+#     dag=dag,
+#     op_args=['1', '2'])
+
 test_arguments_pass = PythonOperator(
     task_id='test_arguments_pass',
     provide_context=True,
     python_callable=print_context,
     dag=dag,
-    op_args=['1', '2'])
+    op_kwargs={'x': '1', 'y': '2'})
 
 end_task = DummyOperator(task_id='end_dummy_task', retries=3, dag=dag)
 
