@@ -38,8 +38,8 @@ def get_matched_by_orc_id(authors, investigators):
     return result
 
 def read_files_from_s3(bucket_name, key1, key2):
-    df1 = read_csv_from_s3(bucket_name, key1)
-    df2 = read_csv_from_s3(bucket_name, key2)
+    df1 = read_csv_from_s3(bucket_name, key1, author_columns)
+    df2 = read_csv_from_s3(bucket_name, key2, investigator_columns)
     return get_matched_by_orc_id(df1[(df1['orcid'].notnull()) & (df1['orcid'] != '')],
                                  df2[(df2['orcid'].notnull()) & (df2['orcid'] != '')])
 
