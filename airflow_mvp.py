@@ -25,7 +25,7 @@ def read_csv_from_s3(bucket_name, input_key, columns):
     obj = s3_client().get_object(Bucket= bucket_name , Key = input_key)
     df = pd.read_csv(io.BytesIO(obj['Body'].read()), encoding='Windows-1252')
     df.columns = columns
-    return df
+    return df.fillna('')
 
 def save_df_as_csv_to_s3(df, bucket_name, output_key):
     csv_buffer = StringIO()
