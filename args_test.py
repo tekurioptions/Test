@@ -3,11 +3,12 @@ from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
 from datetime import timedelta, datetime
 
-def print_context(x, ds, *args, **kwargs):
+def print_context(x, y, ds, *args, **kwargs):
     print(args)
     print(kwargs)
     print(ds)
     print(x)
+    print(y)
     return 'Whatever you return gets printed in the logs'
 
 
