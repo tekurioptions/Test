@@ -36,5 +36,8 @@ pull = BashOperator(
     bash_command='echo {{ ti.xcom_pull(task_ids="push") }}',
     dag=dag)
 
+pull2 = PythonOperator(
+    task_id='pull2', dag=dag, python_callable=puller, provide_context=True)
+
 # pull.set_upstream(push1)
-push1 >> pull
+push1 >> pull >> pull2
