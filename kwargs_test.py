@@ -14,12 +14,11 @@ dag = DAG(
     schedule_interval="@once",
     default_args=args)
 
-value_1 = [1, 2, 3]
-
 
 def push(**kwargs):
-    # pushes an XCom without a specific target
-    kwargs['ti'].xcom_push(key='key1', value=value_1)
+    task_instance = kwargs['ti']
+    value_1 = [1, 2, 3]
+    task_instance.xcom_push(key='key1', value=value_1)
 
 
 def puller(**kwargs):
@@ -39,5 +38,4 @@ pull = BashOperator(
 pull2 = PythonOperator(
     task_id='pull2', dag=dag, python_callable=puller, provide_context=True)
 
-# pull.set_upstream(push1)
 push1 >> pull >> pull2
