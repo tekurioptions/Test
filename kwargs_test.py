@@ -17,7 +17,7 @@ dag = DAG(
 
 def push(**kwargs):
     task_instance = kwargs['ti']
-    value_1 = [1, 2, 3]
+    value_1 = [1, 2, 3, 4]
     task_instance.xcom_push(key='key1', value=value_1)
 
 
