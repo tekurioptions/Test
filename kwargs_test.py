@@ -3,6 +3,7 @@ import airflow
 from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 from airflow.operators.python_operator import PythonOperator
+from airflow.operators.dummy_operator import DummyOperator
 
 args = {
     'owner': 'airflow',
@@ -27,6 +28,8 @@ def puller(**kwargs):
     print(v1)
     return v1
 
+start_task = DummyOperator(task_id='start_dummy_task', retries=3, dag=dag)
+
 push1 = PythonOperator(
     task_id='push', dag=dag, python_callable=push, provide_context=True)
 
@@ -38,4 +41,4 @@ pull = BashOperator(
 pull2 = PythonOperator(
     task_id='pull2', dag=dag, python_callable=puller, provide_context=True)
 
-push1 >> pull >> pull2
+start_task >> push1 >> pull >> pull2
