@@ -11,7 +11,7 @@ args = {
 }
 
 dag = DAG(
-    'example_xcom',
+    'disable_test',
     schedule_interval="@once",
     default_args=args)
 
