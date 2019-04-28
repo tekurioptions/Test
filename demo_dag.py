@@ -22,7 +22,7 @@ DAG_DEFAULT_ARGS = {
         'retry_delay': timedelta(minutes=1)
 }
 
-dag = DAG('airflow_mvp', description='Airflow Demo',
+dag = DAG('airflow_demo_mvp', description='Airflow Demo',
           start_date=datetime(2019, 4, 4),
           schedule_interval='@once',
           default_args=DAG_DEFAULT_ARGS, catchup=False)
