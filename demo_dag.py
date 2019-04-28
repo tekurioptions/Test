@@ -2,9 +2,9 @@ from airflow import DAG
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
 from datetime import timedelta, datetime
-from raw.matched import ingest_to_raw
-from clean.matched import clean_authors, clean_investigators
-from master.matched import create_master_matched
+from matched_raw import ingest_to_raw
+from matched_clean import clean_authors, clean_investigators
+from matched_master import create_master_matched
 
 def master_transform_save(bucket_name, authors_clean_key, investigators_clean_key, output_key):
     create_master_matched(bucket_name, authors_clean_key, investigators_clean_key, output_key)
