@@ -65,8 +65,8 @@ clean_investigators_save_s3 = PythonOperator(
     python_callable=clean_save_investigators,
     op_kwargs={
         'bucket_name': Common.Bucket.value,
-        'investigators_raw_key': 'ca4i-fr-data/airflow/mvp/raw/investigators.csv',
-        'investigators_clean_key': 'ca4i-fr-data/airflow/mvp/clean/investigators.csv'
+        'investigators_raw_key': Raw.Investigators.value,
+        'investigators_clean_key': Cleaned.Investigators.value
     },
     dag=dag)
 
@@ -75,9 +75,9 @@ master_transform_save_s3 = PythonOperator(
     python_callable=master_transform_save,
     op_kwargs={
         'bucket_name': Common.Bucket.value,
-        'authors_clean_key': 'ca4i-fr-data/airflow/mvp/clean/authors.csv',
-        'investigators_clean_key': 'ca4i-fr-data/airflow/mvp/clean/investigators.csv',
-        'output_key': 'ca4i-fr-data/airflow/mvp/master/matched.csv'
+        'authors_clean_key': Cleaned.Authors.value,
+        'investigators_clean_key': Cleaned.Investigators.value,
+        'output_key': Master.Matched.value
     },
     dag=dag)
 
