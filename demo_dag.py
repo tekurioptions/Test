@@ -5,6 +5,7 @@ from datetime import timedelta, datetime
 from matched_raw import ingest_to_raw
 from matched_clean import clean_authors, clean_investigators
 from matched_master import create_master_matched
+from datalake import Raw,Cleaned, Master
 
 def master_transform_save(bucket_name, authors_clean_key, investigators_clean_key, output_key):
     create_master_matched(bucket_name, authors_clean_key, investigators_clean_key, output_key)
@@ -34,7 +35,7 @@ ingest_authors_to_raw = PythonOperator(
     python_callable=ingest_to_raw,
     op_kwargs={
         'filename': '/home/kumar.tekurinagendra/airflow_files/input/authors1.csv',
-        'key': 'ca4i-fr-data/airflow/mvp/raw/authors.csv',
+        'key': Raw.Authors.value,
         'bucket_name': 'ucb-qb-ca-eu-west-1-data'
     },
     dag=dag)
@@ -81,6 +82,8 @@ master_transform_save_s3 = PythonOperator(
     dag=dag)
 
 end_task = DummyOperator(task_id='end_dummy_task', retries=3, dag=dag)
+
+# start_task.set_downstream()
 
 start_task >> ingest_authors_to_raw
 start_task >> ingest_investigators_to_raw
