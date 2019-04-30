@@ -6,6 +6,7 @@ from matched_raw import ingest_to_raw
 from matched_clean import clean_authors, clean_investigators
 from matched_master import create_master_matched
 from datalake import Raw,Cleaned, Master, Source, Common
+from save_to_postgres import create_engine_psql, insert_to_db
 
 def master_transform_save(bucket_name, authors_clean_key, investigators_clean_key, output_key, **kwargs):
     output = create_master_matched(bucket_name, authors_clean_key, investigators_clean_key, output_key)
@@ -15,6 +16,8 @@ def master_transform_save(bucket_name, authors_clean_key, investigators_clean_ke
 def save_to_postgres(**kwargs):
     task_instance = kwargs['ti']
     output = task_instance.xcom_pull(key='output', task_ids='master_transform_save_s3')
+    engine = create_engine_psql()
+    insert_to_db(engine, output, 'matched_records')
     print(type(output))
     print(output.count())
 
