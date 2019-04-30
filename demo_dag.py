@@ -102,4 +102,5 @@ ingest_authors_to_raw >> clean_authors_save_s3
 ingest_investigators_to_raw >> clean_investigators_save_s3
 clean_authors_save_s3 >> master_transform_save_s3
 clean_investigators_save_s3 >> master_transform_save_s3
-master_transform_save_s3 >> end_task
+master_transform_save_s3 >> export_master_to_database
+export_master_to_database >> end_task
