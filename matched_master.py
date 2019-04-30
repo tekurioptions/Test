@@ -27,3 +27,4 @@ def join_authors_investigators(bucket_name, authors_clean_key, investigators_cle
 def create_master_matched(bucket_name, authors_clean_key, investigators_clean_key, output_key):
     output = join_authors_investigators(bucket_name, authors_clean_key, investigators_clean_key)
     save_df_as_csv_to_s3(output, bucket_name, output_key)
+    return output

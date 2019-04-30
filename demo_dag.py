@@ -7,8 +7,16 @@ from matched_clean import clean_authors, clean_investigators
 from matched_master import create_master_matched
 from datalake import Raw,Cleaned, Master, Source, Common
 
-def master_transform_save(bucket_name, authors_clean_key, investigators_clean_key, output_key):
-    create_master_matched(bucket_name, authors_clean_key, investigators_clean_key, output_key)
+def master_transform_save(bucket_name, authors_clean_key, investigators_clean_key, output_key, **kwargs):
+    output = create_master_matched(bucket_name, authors_clean_key, investigators_clean_key, output_key)
+    task_instance = kwargs['ti']
+    task_instance.xcom_push(key='output', value=output)
+
+def save_to_postgres(**kwargs):
+    task_instance = kwargs['ti']
+    output = task_instance.xcom_pull(key='output', task_ids='master_transform_save_s3')
+    print(type(output))
+    print(output.count())
 
 def clean_save_authors(bucket_name, authors_raw_key, authors_clean_key):
     clean_authors(bucket_name, authors_raw_key, authors_clean_key)
@@ -79,7 +87,10 @@ master_transform_save_s3 = PythonOperator(
         'investigators_clean_key': Cleaned.Investigators.value,
         'output_key': Master.Matched.value
     },
-    dag=dag)
+    dag=dag, provide_context=True)
+
+export_master_to_database = PythonOperator(
+    task_id='export_master_to_database', dag=dag, python_callable=save_to_postgres, provide_context=True)
 
 end_task = DummyOperator(task_id='end_dummy_task', retries=3, dag=dag)
 
