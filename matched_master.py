@@ -11,7 +11,7 @@ def get_matched_by_orc_id(authors, investigators):
     print('Test3')
     result = pd.merge(authors, investigators, on='orcid')
     print('Test4')
-    result = result[output_columns]
+    # result = result[output_columns]
     print('Test5')
     return result
 

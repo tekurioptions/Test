@@ -6,4 +6,4 @@ def create_engine_psql():
     return engine
 
 def insert_to_db(engine, df, table_name):
-    df.to_sql(table_name, con=engine, if_exists='append')
+    df.to_sql(table_name, con=engine, if_exists='replace')
